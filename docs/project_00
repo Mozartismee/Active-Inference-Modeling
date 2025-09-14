@@ -1,0 +1,164 @@
+# AIF\_project\_00
+
+**FEP Gate-Law v0.1：Daniell-driven ELBO Checker**
+定位：把 FEP/ELBO 的「**可定義、可換序、可微**」做成**可審核的小引擎**＋4–6 頁 tech note。黑箱變開關：能換才換，不能換就修。
+
+---
+
+## 1) 專案交付物（v0.1 必備）
+
+* `defs/defs.tex`：**Daniell 上積分 → 外測度 → Carathéodory 可測 → 測度**；含「非負→有號」延拓的正式語句。
+* `cards/` 三張檢核卡：
+
+  * `measurability.md`（Littlewood/遮罩、裁剪、a.e. 語言）
+  * `integrability.md`（$L^1$/主導函數/截斷/外積分）
+  * `swapping.md`（MCT/Fatou/DCT/Tonelli/Fubini 的觸發條件與退避策略）
+* `notebooks/swap_check.ipynb`：紅黃綠燈判定＋「修復菜單」（截斷、主導、重要性取樣、次序重排）。
+* `notebooks/counterexamples.ipynb`：三個最小反例（DCT 失敗、Fatou 僅下界、Tonelli 不適用）。
+* `examples/elbo_gauss.py`：高斯 ELBO 最小例（score vs pathwise 方差對照）。
+* `examples/blanket_product.py`：二重積分窗口（Tonelli/Fubini 可／不可換對照）。
+* `README.md`：一頁爽懂＋動圖；**Assumption manifest** 自動列出當次使用定理與前提。
+
+---
+
+## 2) 14 天衝刺時程（2h/日）
+
+**D1–D2｜定義落地**
+讀 Simonnet **I.4**；寫 `defs.tex`（上積分→外測度→測度，非負→有號延拓）。
+
+**D3｜上積分骨架**
+讀 Simonnet **3.1**；在 `swap_check.ipynb` 實作非負路徑（上逼近、上積分）。
+
+**D4｜收斂三劍**
+讀 Simonnet **3.2**（MCT/Fatou/DCT）；把三律寫成紅黃綠規則；做一個 **DCT 失敗反例**（重尾）。
+
+**D5｜Daniell-mean 補刀**
+讀 Bichteler **II.3**；把「線性泛函→上積分延拓」條款補進 `integrability.md`。
+
+**D6｜可測→幾乎處處**
+讀 Simonnet **3.5–3.6**；完成 `measurability.md`（遮罩、裁剪、Littlewood 近似）。
+
+**D7｜半環接口**
+讀 Simonnet **2.1–2.3**；在 `defs.tex` 補「由積分值誘導外測度」三行語句。
+
+**D8｜AIF 例 1（ELBO）**
+$\Gamma=\log q-\log p$（高斯對高斯）；跑 `swap_check()`：**DCT 綠燈**；score vs pathwise 梯度對照方差。
+
+**D9｜AIF 例 2（blanket/二重積分）**
+產品空間；各做 Tonelli（非負）與 Fubini（$L^1$）例；展示**不可換時的替代算式**。
+
+**D10｜對照字典**
+讀 Cohn **7.7**（Daniell–Stone）；在 tech note 加半頁「**Daniell ↔ Lebesgue**」對照。
+
+**D11｜可微 FEP 條款**
+整理「**導數進積分**」的 sufficiency：a.e. 收斂＋$L^1$ 主導；pathwise/score **選擇律**與方差一句話結論。
+
+**D12｜反例動物園**
+三個最小反例完成，每個附「**AIF 修復菜單**」（截斷、主導、重採樣）。
+
+**D13｜Tech note（4–6 頁）**
+版型：1頁定義、1頁三律、1頁可微條款、1頁二重積分窗口、1頁 demo 圖。
+
+**D14｜展示稿與 README**
+動圖＋Assumption manifest；repo 整備。
+
+---
+
+## 3) 6–12 週擴張（選做）
+
+* **W5–W6（v0.1 釋出）**：二重積分策略器完善；兩個示範穩定；測試與小釋出。
+* **W7–W8（v0.2）**：梯度交換完整支持（pathwise/score）、baseline/控制變量；方差報告；Leibniz 小結。
+* **W9–W12（v1.0）**：Radon–Nikodym、像測度、$L^p$ 強化；公共風險地圖；寫作模板與附錄（定理表＋反例＋審核流程）。
+
+---
+
+## 4) 最小學習路徑（只讀能打產物的段落）
+
+**Simonnet · Measures and Probabilities（主軸）**
+
+* **I.4**（Daniell measures，核心接口）
+* **3.1**（上積分）｜**3.2**（MCT/Fatou/DCT）
+* **3.5–3.6**（可測／本質可積）
+* **2.1–2.3**（半環/外測度，快補）
+* （選）**9**（Tonelli/Fubini，做 blanket 例必讀）
+
+**Bichteler · Integration: A Functional Approach（補刀）**
+
+* **II.3**（The Daniell Mean）
+* **III.1**（Littlewood’s Principles）
+
+**Cohn · Measure Theory（對照）**
+
+* **7.7**（Daniell–Stone Integral）
+
+**Brezis · Functional Analysis（抽取用）**
+
+* Ch.1 的 Hahn–Banach 片段（對偶/延拓直覺）
+* $L^p$ 片段（Hölder/Minkowski；估計與方差界時使用）
+
+**AIF 最小文獻包（只要能引用即可）**
+
+* 一篇 FEP/ELBO 總覽（Friston 線）
+* 一篇 Markov blanket 概念文（da Costa/Parr/Friston 線）
+* 你的《Markov Blanket Density and Free Energy Minimization》草案（遮罩＝可測切片窗口的動機與示例）
+
+---
+
+## 5) MCSR 對齊（每個週期都走：邊界 → 差異 → 範疇提升）
+
+* **W1｜邊界**：期望落地唯一接口（Daniell）；Landing：I.4+3.1
+* **W2｜差異**：反例動物園壓縮；Landing：3.2+Littlewood
+* **W3｜語義固化**：可測/可積卡完稿；Landing：2.1–2.3+3.5–3.6
+* **W4｜範疇提升**：把報告函子化（推前/遮罩下自然性）；Landing：3.3
+* **W5｜Blanket 窗口**：產品測度與次序；Landing：9
+* **W6｜封裝釋出**：v0.1
+
+---
+
+## 6) Repo 骨架（可直接開工）
+
+```
+fep-gatelaw-v0/
+├─ README.md
+├─ defs/
+│  └─ defs.tex
+├─ cards/
+│  ├─ measurability.md
+│  ├─ integrability.md
+│  └─ swapping.md
+├─ notebooks/
+│  ├─ swap_check.ipynb
+│  └─ counterexamples.ipynb
+└─ examples/
+   ├─ elbo_gauss.py
+   └─ blanket_product.py
+```
+
+---
+
+## 7) Assumption manifest（模板）
+
+```md
+# Assumption Manifest (run_id: …)
+- Integral landing: Daniell upper integral (I.4), extended to signed via f^+-f^-.
+- Measurability: a.e. well-defined; Littlewood approx. valid on support.
+- Integrability: [ ] nonnegative  [ ] L1 with dominator g  [ ] truncated at M with ||err||_1≤ε
+- Swap Law used: [ ] MCT  [ ] Fatou  [ ] DCT(g∈L1)  [ ] Tonelli  [ ] Fubini(L1)
+- Differentiation under ∫: [ ] pathwise (reparam OK, ∂θf dominated)  [ ] score (∂θ log q ∈ L1)
+- Fallbacks: [ ] truncation  [ ] importance sampling  [ ] order change blocked (witness: ex-…)
+```
+
+---
+
+## 8) 展示策略（讓人一眼記住）
+
+* **兩張圖**：
+
+  1. 同一段 ELBO 推導：左「民間手勢」，右「Gate-Law」：綠（可換）、黃（需主導/截斷）、紅（禁用＋最小反例）。
+  2. 二重積分換序前後的數值差＋誤差上界；附不可換最小例。
+* **一鍵 demo**：`swap_check(f_n, f, q, mode="DCT") → verdict + needed + fix`。
+* **Assumption manifest**：每次實驗自動輸出本次使用條款，審稿友好。
+
+---
+
+**一句話宣言**：把 FEP/ELBO 的「可定義、可換序、可微」做成公共門檻與稽核卡。能換才換，不能換就修；黑箱變開關。
